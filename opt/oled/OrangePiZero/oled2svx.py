@@ -26,7 +26,7 @@ screen_saver=300
 
 width = device.width
 height = device.height
-image = Image.new("1", (width, height))
+image = Image.new("0", (width, height))
 parrot = 0
 text_parrot = ""
 last_callsign = ""
@@ -47,7 +47,7 @@ font20 = ImageFont.truetype(font_path, 20)
 font = ImageFont.truetype(font_path, 18)
 
 def get_svxlog():
-    f = os.popen('egrep -a -h "Talker start on|Talker stop on" /var/log/svxlink | tail -1')
+    f = os.popen('egrep -a -h "Talker start on|Talker stop on" /tmp/svxlink.log | tail -1')
     logsvx = str(f.read()).split(" ")
     if len(logsvx)>=2 and logsvx[4]=="start":
        CALL=logsvx[8].rstrip("\r\n")
@@ -79,7 +79,7 @@ def get_cpuL():
     return CPUL
 
 def get_svxlog_parrot():
-    p = os.popen('egrep -a -h "module Parrot" /var/log/svxlink | tail -1')
+    p = os.popen('egrep -a -h "module Parrot" /tmp/svxlink.log | tail -1')
     logsvx_parrot = str(p.read()).split(" ")
     if len(logsvx_parrot)>=2 and logsvx_parrot[3]=="Activating":
         text_parrot = "PARROT"
@@ -88,7 +88,7 @@ def get_svxlog_parrot():
     return text_parrot
 
 def get_svxlog_metarinfo():
-    m = os.popen('egrep -a -h "module MetarInfo" /var/log/svxlink | tail -1')
+    m = os.popen('egrep -a -h "module MetarInfo" /tmp/svxlink.log | tail -1')
     logsvx_metarinfo = str(m.read()).split(" ")
     if len(logsvx_metarinfo)>=2 and logsvx_metarinfo[3]=="Activating":
         text_metarinfo = "METARINFO"
@@ -97,7 +97,7 @@ def get_svxlog_metarinfo():
     return text_metarinfo
 
 def get_svxlog_echolink():
-    e = os.popen('egrep -a -h "ctivating module EchoLink" /var/log/svxlink | tail -1')
+    e = os.popen('egrep -a -h "ctivating module EchoLink" /tmp/svxlink.log | tail -1')
     logsvx_echolink = str(e.read()).split(" ")
     if len(logsvx_echolink)>=2 and logsvx_echolink[3]=="Activating":
         text_echolink = "ECHOLINK"
@@ -106,7 +106,7 @@ def get_svxlog_echolink():
     return text_echolink
 
 def get_svxlog_echolink_connection():
-    c = os.popen('egrep -a -h "EchoLink QSO state changed" /var/log/svxlink | tail -1')
+    c = os.popen('egrep -a -h "EchoLink QSO state changed" /tmp/svxlink.log | tail -1')
     logsvx_echolink_connection = str(c.read()).split(" ")
     if len(logsvx_echolink_connection)>=2 and logsvx_echolink_connection[8].rstrip("\r\n")=="CONNECTED":
        CONF=logsvx_echolink_connection[2].lstrip("*").rstrip(":").rstrip("*")
@@ -115,7 +115,7 @@ def get_svxlog_echolink_connection():
     return CONF
 
 def get_svxlog_echolink_callsign():
-    s = os.popen('egrep -a -h ">" /var/log/svxlink | tail -1')
+    s = os.popen('egrep -a -h ">" /tmp/svxlink.log | tail -1')
     logsvx_echolink_callsign = str(s.read()).split(" ")
     if len(logsvx_echolink_callsign)>=2:
        #CALLSIGN=logsvx_echolink_callsign[2].lstrip("-").lstrip(">")
@@ -130,7 +130,7 @@ def get_svxlog_echolink_callsign():
     return CALLSIGN
 
 def get_svxlog_echolink_notalk():
-    n = os.popen('egrep -a -h "' + last_callsign  + '" /var/log/svxlink | tail -1')
+    n = os.popen('egrep -a -h "' + last_callsign  + '" /tmp/svxlink.log | tail -1')
     logsvx_echolink_notalk = str(n.read()).split(" ")
     if len(logsvx_echolink_notalk)>=2:
        CALL=logsvx_echolink_notalk[2]
