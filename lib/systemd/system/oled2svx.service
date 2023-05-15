@@ -4,7 +4,11 @@ After=multi-user.target svxlink.service
 
 [Service]
 Type=idle
+Restart=always
+KillMode=process
 ExecStart=/usr/bin/python3 /opt/oled/oled2svx.py
+RestartSec=5
+TimeoutSec=5
 WorkingDirectory=/opt/oled
 User=root
 
